@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+     <!-- include title -->
+    <title>Todos </title>
+
+     <!-- include css-->
+       <!-- <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">-->
+        <link href="css/bootstrap.css" type="text/css" rel="stylesheet"/>
+		<link href="css/todostyle.css" type="text/css" rel="stylesheet"/>
+		<link href="css/fontawesome-all.min.css" type="text/css" rel="stylesheet"/>
+
+</head>
+    <body>
+		<div class="container-fluid col-md-12 col-sm-12 row mx-auto">
+
+     			<!--- left panel-->
+                        <div class="col-md-3 leftPanel highlight topAlign1 jumbotron">
+
+                                       <div class="row navbar-light">
+
+
+                                    <!--NAVBAR LOGO-->
+                                    <div class="col-md-6">
+                                         
+                                    </div>
+                                    <div class="col-md-12 text-center effect">
+                                                    <h1><span class="fa fa-trash"></span>Planner</h1>
+                                                            <b>prioritize your tasks</b>
+                                    </div>
+                                    
+                                    <!--NAVNAR LOGO ENDS-->
+                                                            <nav class=" nav navbar-expand-md">
+                                                                    <!--HAMMBUGGER BUTTON-->
+                                                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar">
+                                                                    <span class="navbar-toggler-icon"></span>
+                                                    </button>
+                                    <!--HAMMBUGGER BUTTON-->
+
+                                                    <div class="collapse navbar-collapse col-md-12" id="navbar">
+                                                                    <ul class="navbar-nav nav-pills flex-column" id="tabs">
+                                                                                    <li class="nav-item"><a class="nav-link"  href="#">Todos</a></li>
+                                                                                    <li class="nav-item"><a class="nav-link"  href="#">Events</a></li>
+                                                                                    <li class="nav-item"><a class="nav-link"  href="#">Rain Check</a></li>
+                                                                                    <li class="nav-item"><a class="nav-link" href="#">Calender</a></li>
+                                                                                    <li class="nav-item btn btn-danger"><a  class="nav-link" th:action="@{/logout}" href="/logout">log out</a></li>
+                                                                    </ul>
+                                                    </div>
+                                                            </nav>
+
+
+
+                                       </div>
+							
+							
+					</div>
+				<!--end of left panel --> 
+	
+				<!--- right panel -->
+				<div class="col-md-9 topAlign1 jumbotron">
+                                    <div class="col-md-12">
+                                        <h3 th:text="${welcomeMsg}"></h3>
+                                      <img class="img img-responsive img-thumbnail userImage col-md-3" th:src="@{'/images/'+${PImage.profileImage}}"/>
+                                    </div>
+                                      
+
+						<h1 class="text-center" id="outlook"><b> Create todo list </b></h1>
+						<hr>
+						
+				<span id="error"> </span>	
+					<form class="shade" method='post'th:action ="@{/createTodo}" action="/createTodo" th:object="${todos}">
+						<div class="col-md-12">
+								<div class="row">
+									<div class="col-md-10 form-group">
+											<input type="text" th:field="*{item}" placeholder="create new todo" name="_todo" id="at" class="form-control" required />
+                                                                                        <p th:if="${#fields.hasErrors('item')}"th:errors="*{item}" class="alert alert-danger"><br/></p>
+									</div>
+										<div class="col-md-2 form-group">
+												<button type="submit" class="btn btn-success form-control" id="add">add to list <i class="fa fa-plus"></i></button>
+										</div>
+										
+								</div>
+						</div>
+					
+				
+			</form>
+			<hr> 
+			
+			<!--- display panel -->
+			<div class="row">
+				<div class="col-md-12">
+                                    <p class="text-center" th:if="${emptyList} == true">
+                                        Your Todo list is empty... Add some Todos...
+                                    </p>
+					 
+					<table th:if="${listNotEmpty} == true" class="table table-bordered" id="todostable">
+						<thead class="thead-default">
+							<tr>
+								<th>No.</th>
+								<th>Item</th>
+								<th>Actions</th>
+							</tr>
+						</thead>
+						<tbody id="body">
+                                                                                                <tr th:each="todo , iterStat : ${tod}">
+												<td th:text="${iterStat.count}"></td>
+												<td th:text="${todo.item}"></td>
+									<td>
+											<a href="/delete/?" th:href="@{/delete__${todo.id}__}" class="btn btn-danger bn-sm"><span class="fa fa-trash"> </span> delete </a>
+											
+											<a href="/edit/1" th:href="@{/edit__${todo.id}__}" class="btn btn-primary bn-sm"><span class="fa fa-edit"> </span> edit </a>
+											
+											<a th:if="${todo.completed} == 0" href="/complete/1" th:href="@{/complete__${todo.id}__}" class="btn btn-info bn-sm"><span class="fa fa-user"> </span> completed </a>
+                                                                                        <a th:if="${todo.completed} == 1" href="/complete/1" th:href="@{/complete__${todo.id}__}" class="btn btn-warning bn-sm"><span class="fa fa-user"> </span> completed </a>
+								
+											<!-- <a hre="" class="btn btn-warning bn-sm"><span class="glyphicon glyphicon-ok"> </span> mark as completed </a> -->
+												
+									</td>
+								</tr>
+				
+								
+						</tbody>
+					</table>
+				</div>
+			</div> 
+
+	</div>
+
+				<!--- footer -->
+				<footer class="text-center mx-auto topAlign2">
+					<i>created and designed by snowcoder</i><br>
+					<i>Edited By KrissSaviour</i>
+				</footer>
+				<!--- end of footer -->
+        </div> 
+
+		 <script src="js/jquery.js"> </script>
+		 <script src="js/bootstrap.bundle.js"> </script>
+		 
+    </body>
+</html>		
